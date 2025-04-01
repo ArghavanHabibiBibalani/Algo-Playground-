@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da3c5db7157434e4d9e6595b87843042, type: 3}
+  m_Name: BipartiteGraphData1
+  m_EditorClassIdentifier: 
+  groupA: 010000000200000003000000
+  groupB: 01000000020000000300000004000000
+  edges:
+  - Origin: 0
+    Destination: 0
+  - Origin: 0
+    Destination: 1
+  - Origin: 1
+    Destination: 0
+  - Origin: 1
+    Destination: 1
+  - Origin: 2
+    Destination: 2
+  - Origin: 2
+    Destination: 3
