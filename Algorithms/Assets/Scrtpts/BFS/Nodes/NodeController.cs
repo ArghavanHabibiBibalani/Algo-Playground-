@@ -35,4 +35,38 @@ public class NodeController : MonoBehaviour
     {
         _nodeSprite.color = color;
     }
+
+    public void HideNode()
+    {
+        _nodeSprite.enabled = false;
+        _nodeText.enabled = false;
+
+        if (GraphManager.Instance != null)
+        {
+            foreach (var connection in _nodeData.Connections)
+            {
+                if (GraphManager.Instance.TryGetEdge(_nodeData.Value, connection.Value, out EdgeRenderer edge))
+                {
+                    edge.HideEdge();
+                }
+            }
+        }
+    }
+
+    public void ShowNode()
+    {
+        _nodeSprite.enabled = true;
+        _nodeText.enabled = true;
+
+        if (GraphManager.Instance != null)
+        {
+            foreach (var connection in _nodeData.Connections)
+            {
+                if (GraphManager.Instance.TryGetEdge(_nodeData.Value, connection.Value, out EdgeRenderer edge))
+                {
+                    edge.ShowEdge();
+                }
+            }
+        }
+    }
 }

@@ -5,5 +5,5 @@ using UnityEngine;
 public class NodeData : ScriptableObject
 {
     public int Value;
-    public List<NodeData> Connections;
+    public List<NodeData> Connections = new List<NodeData>();
 }

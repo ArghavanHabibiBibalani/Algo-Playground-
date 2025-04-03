@@ -12,4 +12,14 @@ public class EdgeRenderer : MonoBehaviour
         lineRenderer.SetPosition(0, start);
         lineRenderer.SetPosition(1, end);
     }
+    public void HideEdge()
+    {
+        lineRenderer.enabled = false; 
+    }
+
+    public void ShowEdge()
+    {
+        lineRenderer.enabled = true; 
+    }
+
 }

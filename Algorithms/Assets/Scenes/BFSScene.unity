@@ -219,6 +219,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 111179587931024307, guid: af34dfb4f6040c4479ef23dfdf087cee, type: 3}
+      propertyPath: _graphContainer
+      value: 
+      objectReference: {fileID: 1986253189}
     - target: {fileID: 262484179132659347, guid: af34dfb4f6040c4479ef23dfdf087cee, type: 3}
       propertyPath: m_Name
       value: GraphManager
@@ -268,6 +272,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af34dfb4f6040c4479ef23dfdf087cee, type: 3}
+--- !u!4 &1986253189 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6967228525824058710, guid: af34dfb4f6040c4479ef23dfdf087cee, type: 3}
+  m_PrefabInstance: {fileID: 1276999566}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
