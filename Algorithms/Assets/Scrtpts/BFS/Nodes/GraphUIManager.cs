@@ -29,7 +29,7 @@ public class GraphUIManager : MonoBehaviour
     private void OnAlgorithmDropdownChanged(int value) 
     {
         if (value == 0)
-            algorithmText.text = "Matching problem";
+            algorithmText.text = "DFS Algorithm";
         else if (value == 1)
             algorithmText.text = "BFS Algorithm";
     }
@@ -63,15 +63,12 @@ public class GraphUIManager : MonoBehaviour
 
     private void OnExecuteAlgorithmClicked()
     {
-        string selectedAlgorithm = algorithmText.text;
+        Debug.Log("Number of edges: " + GraphManager.Instance._edges.Count);
 
-        if (selectedAlgorithm == "BFS Algorithm")
-        {
-            SceneManager.LoadScene(2);
-        }
-        else if (selectedAlgorithm == "Matching problem")
-        {
-            SceneManager.LoadScene(1);
-        }
+        string selectedAlgorithm = algorithmText.text;
+        SelectedAlgorithmData.SelectedAlgorithm = selectedAlgorithm;
+
+        SceneManager.LoadScene(1);
+
     }
 }

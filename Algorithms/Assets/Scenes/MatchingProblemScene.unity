@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &201460359
+--- !u!1 &197194637
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,40 +127,100 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 201460361}
-  - component: {fileID: 201460360}
+  - component: {fileID: 197194640}
+  - component: {fileID: 197194639}
+  - component: {fileID: 197194638}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: AlgorithmController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &201460360
+--- !u!114 &197194638
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 201460359}
+  m_GameObject: {fileID: 197194637}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e89e535e25ddf44b874bf19177ab664, type: 3}
+  m_Script: {fileID: 11500000, guid: 62fde7218b8f9944082188892c17c6a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodePrefab: {fileID: 8524164187097429967, guid: cf99084036703654ba42204b07a2c70b, type: 3}
-  edgePrefab: {fileID: 2415772974650069384, guid: b4e95a95c3316384b979e3d6e7d5e1a6, type: 3}
-  graphData: {fileID: 11400000, guid: 8a58f9e12a4287a47b3cf1e6e64b3245, type: 2}
---- !u!4 &201460361
+  _graphData: {fileID: 11400000, guid: 0a540e2b5425b7e49a1261dd2c8cc1b7, type: 2}
+  _node: {fileID: 8524164187097429967, guid: cf99084036703654ba42204b07a2c70b, type: 3}
+  _graphContainer: {fileID: 197194640}
+  _edgePrefab: {fileID: 2415772974650069384, guid: b4e95a95c3316384b979e3d6e7d5e1a6, type: 3}
+--- !u!114 &197194639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197194637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a47c2849e2710a4a88452af930696fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  algorithmExecutor: {fileID: 1541317295}
+--- !u!4 &197194640
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 201460359}
+  m_GameObject: {fileID: 197194637}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.802373, y: -0.28683516, z: -0.02985667}
+  m_LocalPosition: {x: 326.79724, y: 118.18195, z: 0.8676375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1541317294
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1541317296}
+  - component: {fileID: 1541317295}
+  m_Layer: 0
+  m_Name: 'AlgorithmExecutor '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1541317295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541317294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9070db28a20b06048a0635dfe1b01a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphManager: {fileID: 197194638}
+--- !u!4 &1541317296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541317294}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 326.79724, y: 118.18195, z: 0.8676375}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -263,4 +323,5 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1622065427}
-  - {fileID: 201460361}
+  - {fileID: 197194640}
+  - {fileID: 1541317296}
