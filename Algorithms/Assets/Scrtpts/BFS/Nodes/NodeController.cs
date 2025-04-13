@@ -22,6 +22,11 @@ public class NodeController : MonoBehaviour
         
     }
 
+    //public void CreateEdgeTo(NodeData toNode)
+    //{
+    //    GraphManager.CreateEdge(nodeData, toNode);
+    //}
+
     public void Setup(NodeData nodeData)
     {
         _nodeData = nodeData;

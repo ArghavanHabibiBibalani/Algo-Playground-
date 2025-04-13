@@ -7,6 +7,17 @@ public class AlgorithmRunner : MonoBehaviour
 
     [SerializeField] private AlgorithmExecutor algorithmExecutor;
 
+    private void Awake()
+    {
+        //if (FindObjectOfType<AlgorithmRunner>() != this)
+        //{
+        //    Destroy(gameObject);
+        //}
+        //else
+        //{
+        //    DontDestroyOnLoad(gameObject);
+        //}
+    }
     void Start()
     {
         SelectAlgorithm(SelectedAlgorithmData.SelectedAlgorithm);
