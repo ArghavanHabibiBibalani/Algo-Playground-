@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class NodeController : MonoBehaviour
 {
@@ -11,17 +10,6 @@ public class NodeController : MonoBehaviour
     private SpriteRenderer _nodeSprite;
 
     private NodeData _nodeData;
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void Setup(NodeData nodeData)
     {
         _nodeData = nodeData;

@@ -5,9 +5,6 @@ public class MatchingProblemGraphVisualizer : MonoBehaviour
     public GameObject nodePrefab; 
     public GameObject edgePrefab;
 
-    //public Vector3 posA;
-    //public Vector3 posB;
-
     public BipartiteGraphData graphData; 
 
     void Start()

@@ -2,9 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scrtpts.BFS.BFS
@@ -15,7 +12,6 @@ namespace Assets.Scrtpts.BFS.BFS
         {
             if (graphData.Nodes.Count == 0) yield break;
 
-            // Reset all node colors
             foreach (var node in graphData.Nodes)
             {
                 if (GraphManager.Instance.TryGetNodeController(node.Value, out var controller))
@@ -32,7 +28,7 @@ namespace Assets.Scrtpts.BFS.BFS
             stack.Push(startNode);
 
             if (GraphManager.Instance.TryGetNodeController(startNode.Value, out var startController))
-                startController.ChangeColor(Color.gray); // Gray = discovered but not fully explored
+                startController.ChangeColor(Color.gray); 
 
             while (stack.Count > 0)
             {
@@ -45,13 +41,12 @@ namespace Assets.Scrtpts.BFS.BFS
 
                 if (GraphManager.Instance.TryGetNodeController(current.Value, out var controller))
                 {
-                    controller.ChangeColor(Color.green); // Green = visited
+                    controller.ChangeColor(Color.green);
                 }
 
                 onVisitNode?.Invoke(current);
                 yield return new WaitForSeconds(3f);
 
-                // Traverse neighbors in reverse to simulate recursion order in a stack
                 for (int i = current.Connections.Count - 1; i >= 0; i--)
                 {
                     var neighbor = current.Connections[i];

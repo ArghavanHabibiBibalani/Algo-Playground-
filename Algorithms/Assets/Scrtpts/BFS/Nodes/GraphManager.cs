@@ -1,47 +1,35 @@
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
-using Assets.Scrtpts.BFS.Nodes;
-
-
+using System.IO;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using System.IO;
-
+using Assets.Scrtpts.BFS.Nodes;
 
 public class GraphManager : MonoBehaviour
 {
     [SerializeField] public GraphData _graphData;
-    [SerializeField] public GameObject _node;  
-    [SerializeField] public Transform _graphContainer; 
-    [SerializeField] public GameObject _edgePrefab;  
+    [SerializeField] public GameObject _node;
+    [SerializeField] public Transform _graphContainer;
+    [SerializeField] public GameObject _edgePrefab;
 
     private Dictionary<int, NodeController> _nodeControllers = new();
     public Dictionary<(int, int), EdgeRenderer> _edges = new();
 
     public static GraphManager Instance { get; private set; }
 
-
     private void Awake()
     {
-        if (_graphData.Nodes == null)
-            _graphData.Nodes = new List<NodeData>();
-
         if (Instance == null)
         {
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-
-        if (_graphData.Nodes == null)
-            _graphData.Nodes = new List<NodeData>();
 
         _nodeControllers.Clear();
         _edges.Clear();
@@ -60,26 +48,39 @@ public class GraphManager : MonoBehaviour
 
     public void ClearData()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 1) return;
+        if (SceneManager.GetActiveScene().buildIndex != 0) return;
 
+#if UNITY_EDITOR
         string[] nodeFiles = Directory.GetFiles("Assets/GraphNodes", "*.asset");
         foreach (string file in nodeFiles)
         {
             AssetDatabase.DeleteAsset(file);
         }
 
+        string[] edgeFiles = Directory.GetFiles("Assets/GraphEdges", "*.asset");
+        foreach (string file in edgeFiles)
+        {
+            AssetDatabase.DeleteAsset(file);
+        }
+#endif
+
         _nodeControllers.Clear();
         _edges.Clear();
-        _graphData.Nodes.Clear();
+        _graphData.Edges.Clear();
     }
 
     public void GenerateGraph()
     {
-        List<NodeData> nodesCopy = new List<NodeData>(_graphData.Nodes);
+        List<NodeData> nodesCopy = new(_graphData.Nodes);
         foreach (NodeData node in nodesCopy)
         {
-            if (node != null)
+            if (node != null && !_nodeControllers.ContainsKey(node.Value))
                 AddNode(node.Value);
+        }
+
+        foreach (EdgeData edge in _graphData.Edges)
+        {
+            AddEdge(edge.From, edge.To);
         }
 
         foreach (NodeData node in nodesCopy)
@@ -90,14 +91,28 @@ public class GraphManager : MonoBehaviour
             {
                 if (neighbor == null)
                 {
-                    Debug.LogError($" NodeData not found for {node.Value}");
+                    Debug.LogError($"NodeData not found for {node.Value}");
                     continue;
                 }
-                AddEdge(node.Value, neighbor.Value);
+
+                if (!_edges.ContainsKey((node.Value, neighbor.Value)))
+                    AddEdge(node.Value, neighbor.Value);
+            }
+        }
+
+        foreach (var node in _graphData.Nodes)
+        {
+            node.Connections.Clear();
+            foreach (var id in node.ConnectionIDs)
+            {
+                var connectedNode = _graphData.Nodes.Find(n => n.Value == id);
+                if (connectedNode != null)
+                {
+                    node.Connections.Add(connectedNode);
+                }
             }
         }
     }
-
 
     public void AddNode(int value)
     {
@@ -111,12 +126,12 @@ public class GraphManager : MonoBehaviour
         newNodeData.Value = value;
         newNodeData.Connections = new List<NodeData>();
 
+#if UNITY_EDITOR
         string assetPath = $"Assets/GraphNodes/Node_{value}.asset";
-        #if UNITY_EDITOR
         AssetDatabase.CreateAsset(newNodeData, assetPath);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        #endif
+#endif
 
         _graphData.Nodes.Add(newNodeData);
 
@@ -130,27 +145,54 @@ public class GraphManager : MonoBehaviour
         controller.HideNode();
     }
 
-
     public void AddEdge(int nodeA, int nodeB)
     {
         NodeData nodeDataA = _graphData.Nodes.Find(n => n.Value == nodeA);
         NodeData nodeDataB = _graphData.Nodes.Find(n => n.Value == nodeB);
 
-        if (nodeDataA == null || nodeDataB == null)
+        if (nodeDataA == null)
         {
-            Debug.LogError($"Error: NodeData not found for {nodeA} or {nodeB}. NodeA: {nodeDataA}, NodeB: {nodeDataB}");
-            return;
+            Debug.Log($"Node {nodeA} not found. Creating...");
+            AddNode(nodeA);
+            nodeDataA = _graphData.Nodes.Find(n => n.Value == nodeA);
         }
 
-        nodeDataA.Connections.Add(nodeDataB);
-        nodeDataB.Connections.Add(nodeDataA);
+        if (nodeDataB == null)
+        {
+            Debug.Log($"Node {nodeB} not found. Creating...");
+            AddNode(nodeB);
+            nodeDataB = _graphData.Nodes.Find(n => n.Value == nodeB);
+        }
+
+        if (!nodeDataA.Connections.Contains(nodeDataB))
+            nodeDataA.Connections.Add(nodeDataB);
+        if (!nodeDataB.Connections.Contains(nodeDataA))
+            nodeDataB.Connections.Add(nodeDataA);
+
+        bool alreadyExists = _graphData.Edges.Exists(e =>
+            (e.From == nodeA && e.To == nodeB) || (e.From == nodeB && e.To == nodeA));
+
+        if (!alreadyExists)
+        {
+            EdgeData newEdgeData = ScriptableObject.CreateInstance<EdgeData>();
+            newEdgeData.From = nodeA;
+            newEdgeData.To = nodeB;
+
+#if UNITY_EDITOR
+            string assetPath = $"Assets/GraphEdges/Edge_{nodeA}_{nodeB}.asset";
+            AssetDatabase.CreateAsset(newEdgeData, assetPath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+#endif
+
+            _graphData.Edges.Add(newEdgeData);
+        }
 
         if (_nodeControllers.ContainsKey(nodeA) && _nodeControllers.ContainsKey(nodeB))
         {
-            GameObject newEdge = Instantiate(_edgePrefab, _graphContainer);
-            Debug.Log($"Creating Edge between {nodeA} and {nodeB}");
-            EdgeRenderer edgeRenderer = newEdge.GetComponent<EdgeRenderer>();
-            edgeRenderer.Setup(_nodeControllers[nodeA].transform.position, _nodeControllers[nodeB].transform.position);
+            GameObject edgeGO = Instantiate(_edgePrefab, transform);
+            EdgeRenderer edgeRenderer = edgeGO.GetComponent<EdgeRenderer>();
+            edgeRenderer.Setup(_nodeControllers[nodeA].transform, _nodeControllers[nodeB].transform);
 
             _edges[(nodeA, nodeB)] = edgeRenderer;
             _edges[(nodeB, nodeA)] = edgeRenderer;
@@ -169,27 +211,6 @@ public class GraphManager : MonoBehaviour
             Debug.LogError($"Error: NodeControllers not found for {nodeA} or {nodeB}");
         }
     }
-    private void OnDisable()
-    {
-        if (!Application.isPlaying)
-        {
-            _graphData.Nodes.Clear();
-            _nodeControllers.Clear();
-            _edges.Clear();
-
-            string[] nodeFiles = Directory.GetFiles("Assets/GraphNodes", "*.asset");
-            foreach (string file in nodeFiles)
-            {
-                AssetDatabase.DeleteAsset(file);
-            }
-
-            #if UNITY_EDITOR
-            EditorUtility.SetDirty(_graphData);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            #endif
-        }
-    }
 
     public bool TryGetEdge(int nodeA, int nodeB, out EdgeRenderer edge)
     {
@@ -200,5 +221,4 @@ public class GraphManager : MonoBehaviour
     {
         return _nodeControllers.TryGetValue(value, out controller);
     }
-
 }

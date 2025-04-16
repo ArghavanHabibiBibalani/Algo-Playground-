@@ -10,7 +10,6 @@ public class BFSAlgorithm : IGraphAlgorithm
     {
         if (graphData.Nodes.Count == 0) yield break;
 
-        // Reset all nodes to white at the start
         foreach (var node in graphData.Nodes)
         {
             if (GraphManager.Instance.TryGetNodeController(node.Value, out var controller))
@@ -35,7 +34,7 @@ public class BFSAlgorithm : IGraphAlgorithm
         }
 
         if (GraphManager.Instance.TryGetNodeController(startNode.Value, out var startController))
-            startController.ChangeColor(Color.gray); // Gray when added to queue
+            startController.ChangeColor(Color.gray);
 
         while (queue.Count > 0)
         {
@@ -43,7 +42,7 @@ public class BFSAlgorithm : IGraphAlgorithm
 
             if (GraphManager.Instance.TryGetNodeController(current.Value, out var controller))
             {
-                controller.ChangeColor(Color.green); // Green when visited
+                controller.ChangeColor(Color.green); 
             }
 
             onVisitNode?.Invoke(current);
@@ -57,7 +56,7 @@ public class BFSAlgorithm : IGraphAlgorithm
                     queue.Enqueue(neighbor);
 
                     if (GraphManager.Instance.TryGetNodeController(neighbor.Value, out var neighborController))
-                        neighborController.ChangeColor(Color.gray); // Gray when added to queue
+                        neighborController.ChangeColor(Color.gray);
                 }
             }
         }

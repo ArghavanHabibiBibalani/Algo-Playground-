@@ -50,7 +50,10 @@ public class GraphUIManager : MonoBehaviour
     private void OnAddEdgeClicked()
     {
         string[] edgeData = edgeInputField.text.Split(',');
-        if (edgeData.Length == 2 && int.TryParse(edgeData[0], out int nodeA) && int.TryParse(edgeData[1], out int nodeB))
+
+        if (edgeData.Length == 2 &&
+            int.TryParse(edgeData[0].Trim(), out int nodeA) &&
+            int.TryParse(edgeData[1].Trim(), out int nodeB))
         {
             graphManager.AddEdge(nodeA, nodeB);
             edgeInputField.text = "";

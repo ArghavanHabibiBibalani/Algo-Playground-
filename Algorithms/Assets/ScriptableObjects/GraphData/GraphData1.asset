@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GraphData1
   m_EditorClassIdentifier: 
   Nodes: []
+  Edges: []

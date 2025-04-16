@@ -1,4 +1,3 @@
-using UnityEditor;
 
 public static class SelectedAlgorithmData
 {
