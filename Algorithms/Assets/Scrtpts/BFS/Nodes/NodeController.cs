@@ -10,6 +10,7 @@ public class NodeController : MonoBehaviour
     private SpriteRenderer _nodeSprite;
 
     private NodeData _nodeData;
+
     public void Setup(NodeData nodeData)
     {
         _nodeData = nodeData;
