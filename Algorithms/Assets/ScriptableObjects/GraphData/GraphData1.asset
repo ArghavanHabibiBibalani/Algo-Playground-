@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c3d136e1aeb1145b88b9d17a4a00f7, type: 3}
   m_Name: GraphData1
   m_EditorClassIdentifier: 
-  Nodes: []
-  Edges: []
+  Nodes:
+  - {fileID: 11400000, guid: 749138514cd0fa84b8f460f6b2b7dda5, type: 2}
+  - {fileID: 11400000, guid: bab6b7bdf225a14499b71bc101bcfe9c, type: 2}
+  - {fileID: 11400000, guid: d5ddad9e40c81db47bd2a05d85f32308, type: 2}
+  Edges:
+  - {fileID: 11400000, guid: a81e5308990cb44448479132367712e3, type: 2}
+  - {fileID: 11400000, guid: 81ae569b65285b5479d81d7ab469f236, type: 2}
+  - {fileID: 11400000, guid: 460d64cf206fbef4b86ed8fa9ede0e5d, type: 2}

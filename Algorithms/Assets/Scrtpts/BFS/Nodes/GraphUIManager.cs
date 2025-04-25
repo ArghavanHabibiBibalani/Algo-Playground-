@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Assets.Scrtpts.BFS.Nodes;
+using System.Collections.Generic;
 
 public class GraphUIManager : MonoBehaviour
 {
@@ -73,5 +75,21 @@ public class GraphUIManager : MonoBehaviour
 
         SceneManager.LoadScene(1);
 
+    }
+
+    public void CreateGraph(GraphData graphData)
+    {
+        var nodeCopy = new List<NodeData>(graphData.Nodes);
+        var edgeCopy = new List<EdgeData>(graphData.Edges);
+
+        foreach (var nodeData in nodeCopy)
+        {
+            graphManager.AddNode(nodeData.Value);
+        }
+
+        foreach (var edgeData in edgeCopy)
+        {
+            graphManager.AddEdge(edgeData.From, edgeData.To);
+        }
     }
 }

@@ -1,0 +1,14 @@
+<Graph>
+  <Node value="1">
+    <Connection>2</Connection>
+    <Connection>3</Connection>
+  </Node>
+  <Node value="2">
+    <Connection>1</Connection>
+    <Connection>3</Connection>
+  </Node>
+  <Node value="3">
+    <Connection>1</Connection>
+    <Connection>2</Connection>
+  </Node>
+</Graph>
