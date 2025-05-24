@@ -11,10 +11,11 @@ namespace Assets.Scrtpts.BFS.Nodes
 
         public EdgeData() { }
 
-        public EdgeData(int from, int to)
+        public EdgeData(int from, int to, float weight)
         {
             From = from;
             To = to;
+            Weight = weight;
         }
     }
 }

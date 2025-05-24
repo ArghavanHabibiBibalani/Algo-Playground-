@@ -22,12 +22,11 @@ namespace Assets.Scrtpts.BFS.XML
         private const string nodeBasePath = "Assets/Data/Nodes";
         private const string edgeBasePath = "Assets/Data/Edges";
 #endif
-
-        private void Awake()
+        private void Start()
         {
             LoadFromXML();
-        }
 
+        }
         private void LoadFromXML()
         {
             XmlGraphContainer container = DeserializeXML(xmlFile.text);

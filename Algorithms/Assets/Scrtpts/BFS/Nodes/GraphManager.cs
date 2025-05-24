@@ -38,13 +38,17 @@ public class GraphManager : MonoBehaviour
 
         if (_graphData.Nodes == null)
             _graphData.Nodes = new List<NodeData>();
+
+        ClearData();
+
+        _graphData.Nodes.RemoveAll(node => node == null);
+
+
     }
 
     private void Start()
     {
-        ClearData();
 
-        _graphData.Nodes.RemoveAll(node => node == null);
         GenerateGraph();
     }
 
@@ -53,16 +57,24 @@ public class GraphManager : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex != 0) return;
 
 #if UNITY_EDITOR
-        string[] nodeFiles = Directory.GetFiles("Assets/GraphNodes", "*.asset");
-        foreach (string file in nodeFiles)
+        string nodeDir = "Assets/Data/Nodes";
+        if (Directory.Exists(nodeDir))
         {
-            AssetDatabase.DeleteAsset(file);
+            string[] nodeFiles = Directory.GetFiles(nodeDir, "*.asset");
+            foreach (string file in nodeFiles)
+            {
+                AssetDatabase.DeleteAsset(file);
+            }
         }
 
-        string[] edgeFiles = Directory.GetFiles("Assets/GraphEdges", "*.asset");
-        foreach (string file in edgeFiles)
+        string edgeDir = "Assets/Data/Edges";
+        if (Directory.Exists(edgeDir))
         {
-            AssetDatabase.DeleteAsset(file);
+            string[] edgeFiles = Directory.GetFiles(edgeDir, "*.asset");
+            foreach (string file in edgeFiles)
+            {
+                AssetDatabase.DeleteAsset(file);
+            }
         }
 #endif
 
@@ -70,7 +82,6 @@ public class GraphManager : MonoBehaviour
         _edges.Clear();
         _graphData.Edges.Clear();
     }
-
     public void GenerateGraph()
     {
         List<NodeData> nodesCopy = new(_graphData.Nodes);
@@ -82,7 +93,7 @@ public class GraphManager : MonoBehaviour
 
         foreach (EdgeData edge in _graphData.Edges)
         {
-            AddEdge(edge.From, edge.To);
+            AddEdge(edge.From, edge.To, edge.Weight);
         }
 
         foreach (NodeData node in nodesCopy)
@@ -142,7 +153,7 @@ public class GraphManager : MonoBehaviour
 
     public void AddNode(int value)
     {
-        string directoryPath = "Assets/GraphNodes";
+        string directoryPath = "Assets/Data/Nodes";
         if (!Directory.Exists(directoryPath))
         {
             Directory.CreateDirectory(directoryPath);
@@ -153,7 +164,7 @@ public class GraphManager : MonoBehaviour
         newNodeData.Connections = new List<NodeData>();
 
 #if UNITY_EDITOR
-        string assetPath = $"Assets/GraphNodes/Node_{value}.asset";
+        string assetPath = $"Assets/Data/Nodes/Node_{value}.asset";
         AssetDatabase.CreateAsset(newNodeData, assetPath);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -206,7 +217,7 @@ public class GraphManager : MonoBehaviour
             newEdgeData.Weight = weight;
 
 #if UNITY_EDITOR
-            string assetPath = $"Assets/GraphEdges/Edge_{nodeA}_{nodeB}.asset";
+            string assetPath = $"Assets/Data/Edges/Edge_{nodeA}_{nodeB}.asset";
             AssetDatabase.CreateAsset(newEdgeData, assetPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
