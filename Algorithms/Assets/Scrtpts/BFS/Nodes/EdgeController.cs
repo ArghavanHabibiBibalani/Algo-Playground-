@@ -13,7 +13,7 @@ namespace Assets.Scrtpts.BFS.Nodes
 
         public void Setup(NodeController fromNode, NodeController toNode)
         {
-            lineRenderer.positionCount = 2;
+            lineRenderer.positionCount = 1;
             lineRenderer.SetPosition(0, fromNode.transform.position);
             lineRenderer.SetPosition(1, toNode.transform.position);
         }

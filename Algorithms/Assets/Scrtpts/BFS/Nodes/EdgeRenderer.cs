@@ -20,29 +20,33 @@ public class EdgeRenderer : MonoBehaviour
     {
         if (startTransform != null && endTransform != null)
         {
-            Vector3 start = startTransform.position;
-            Vector3 end = endTransform.position;
+            Vector3 startCenter = startTransform.GetComponent<Renderer>()?.bounds.center ?? startTransform.position;
+            Vector3 endCenter = endTransform.GetComponent<Renderer>()?.bounds.center ?? endTransform.position;
 
-            Vector3 control = (start + end) / 2 + Vector3.up * 1.5f;
+            Vector3 direction = (endCenter - startCenter).normalized;
+
+            float nodeRadius = 0.5f;
+
+            Vector3 startPoint = startCenter + direction * nodeRadius;
+            Vector3 endPoint = endCenter - direction * nodeRadius;
+
+            Vector3 controlPoint = (startPoint + endPoint) / 2f + Vector3.up * 1f;
 
             int segmentCount = 20;
             lineRenderer.positionCount = segmentCount;
 
             for (int i = 0; i < segmentCount; i++)
             {
-                float t = i / (segmentCount - 1f);
-                Vector3 point = CalculateQuadraticBezierPoint(t, start, control, end);
+                float t = i / (float)(segmentCount - 1);
+                Vector3 point = CalculateQuadraticBezierPoint(t, startPoint, controlPoint, endPoint);
                 lineRenderer.SetPosition(i, point);
             }
 
-            Vector3 midPoint = CalculateQuadraticBezierPoint(0.5f, start, control, end);
-
-            edgeWeightText.transform.position = midPoint + Vector3.down * 2.2f;
+            Vector3 midPoint = CalculateQuadraticBezierPoint(0.5f, startPoint, controlPoint, endPoint);
+            edgeWeightText.transform.position = midPoint + Vector3.up * 0.5f;
 
             if (Camera.main != null)
-            {
                 edgeWeightText.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-            }
         }
     }
 
