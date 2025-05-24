@@ -7,6 +7,7 @@ namespace Assets.Scrtpts.BFS.Nodes
     {
         public int From;
         public int To;
+        public float Weight = 1f;
 
         public EdgeData() { }
 

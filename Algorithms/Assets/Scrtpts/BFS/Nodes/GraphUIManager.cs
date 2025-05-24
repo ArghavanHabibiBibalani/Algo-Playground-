@@ -30,10 +30,27 @@ public class GraphUIManager : MonoBehaviour
 
     private void OnAlgorithmDropdownChanged(int value) 
     {
-        if (value == 0)
-            algorithmText.text = "DFS Algorithm";
-        else if (value == 1)
-            algorithmText.text = "BFS Algorithm";
+        switch (value)
+        {
+            case 0:
+                algorithmText.text = "DFS Algorithm";
+                break;
+            case 1:
+                algorithmText.text = "BFS Algorithm";
+                break;
+            case 2:
+                algorithmText.text = "Dijkstra Algorithm";
+                break;
+            case 3:
+                algorithmText.text = "Bellman-Ford Algorithm";
+                break;
+            case 4:
+                algorithmText.text = "Floyd-Warshall Algorithm";
+                break;
+            default:
+                algorithmText.text = "DFS Algorithm";
+                break;
+        }
     }
 
     private void OnAddNodeClicked()

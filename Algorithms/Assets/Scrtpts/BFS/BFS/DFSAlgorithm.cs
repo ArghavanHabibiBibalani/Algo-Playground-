@@ -21,6 +21,13 @@ namespace Assets.Scrtpts.BFS.BFS
                 }
             }
 
+            foreach (var edge in GraphManager.Instance._edges.Values)
+            {
+                edge.ShowEdge();
+            }
+
+            yield return null;
+
             var visited = new HashSet<NodeData>();
             var stack = new Stack<NodeData>();
             var startNode = graphData.Nodes[0];
@@ -28,7 +35,7 @@ namespace Assets.Scrtpts.BFS.BFS
             stack.Push(startNode);
 
             if (GraphManager.Instance.TryGetNodeController(startNode.Value, out var startController))
-                startController.ChangeColor(Color.gray); 
+                startController.ChangeColor(Color.gray);
 
             while (stack.Count > 0)
             {
@@ -47,9 +54,8 @@ namespace Assets.Scrtpts.BFS.BFS
                 onVisitNode?.Invoke(current);
                 yield return new WaitForSeconds(3f);
 
-                for (int i = current.Connections.Count - 1; i >= 0; i--)
+                foreach (var neighbor in current.Connections)
                 {
-                    var neighbor = current.Connections[i];
                     if (!visited.Contains(neighbor))
                     {
                         stack.Push(neighbor);

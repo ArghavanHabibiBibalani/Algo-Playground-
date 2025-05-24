@@ -38,19 +38,16 @@ namespace Assets.Scrtpts.BFS.XML
             Dictionary<int, NodeData> nodeLookup = new Dictionary<int, NodeData>();
 
 #if UNITY_EDITOR
-            string nodeBasePath = "Assets/Data/Nodes";
-            string edgeBasePath = "Assets/Data/Edges";
-
-            if (!System.IO.Directory.Exists(nodeBasePath))
+            if (!Directory.Exists(nodeBasePath))
             {
-                System.IO.Directory.CreateDirectory(nodeBasePath);
-                UnityEditor.AssetDatabase.Refresh();
+                Directory.CreateDirectory(nodeBasePath);
+                AssetDatabase.Refresh();
             }
 
-            if (!System.IO.Directory.Exists(edgeBasePath))
+            if (!Directory.Exists(edgeBasePath))
             {
-                System.IO.Directory.CreateDirectory(edgeBasePath);
-                UnityEditor.AssetDatabase.Refresh();
+                Directory.CreateDirectory(edgeBasePath);
+                AssetDatabase.Refresh();
             }
 #endif
 
@@ -61,17 +58,17 @@ namespace Assets.Scrtpts.BFS.XML
 
 #if UNITY_EDITOR
                 string nodePath = $"{nodeBasePath}/Node_{parsedValue}.asset";
-                node = UnityEditor.AssetDatabase.LoadAssetAtPath<NodeData>(nodePath);
+                node = AssetDatabase.LoadAssetAtPath<NodeData>(nodePath);
 
                 if (node == null)
                 {
                     node = ScriptableObject.CreateInstance<NodeData>();
                     node.Value = parsedValue;
-                    UnityEditor.AssetDatabase.CreateAsset(node, nodePath);
+                    AssetDatabase.CreateAsset(node, nodePath);
                 }
 #else
-        node = ScriptableObject.CreateInstance<NodeData>();
-        node.Value = parsedValue;
+                node = ScriptableObject.CreateInstance<NodeData>();
+                node.Value = parsedValue;
 #endif
 
                 node.ConnectionIDs.Clear();
@@ -90,7 +87,13 @@ namespace Assets.Scrtpts.BFS.XML
 
                 foreach (var conn in nodeXml.Connections)
                 {
-                    int connValue = int.Parse(conn);
+                    string[] parts = conn.Split(',');
+                    int connValue = int.Parse(parts[0]);
+
+                    float weight = 1f;
+                    if (parts.Length > 1)
+                        float.TryParse(parts[1], out weight);
+
                     if (!node.ConnectionIDs.Contains(connValue))
                         node.ConnectionIDs.Add(connValue);
 
@@ -105,19 +108,21 @@ namespace Assets.Scrtpts.BFS.XML
 
 #if UNITY_EDITOR
                     string edgePath = $"{edgeBasePath}/Edge_{edgeKey}.asset";
-                    edge = UnityEditor.AssetDatabase.LoadAssetAtPath<EdgeData>(edgePath);
+                    edge = AssetDatabase.LoadAssetAtPath<EdgeData>(edgePath);
 
                     if (edge == null)
                     {
                         edge = ScriptableObject.CreateInstance<EdgeData>();
                         edge.From = nodeValue;
                         edge.To = connValue;
-                        UnityEditor.AssetDatabase.CreateAsset(edge, edgePath);
+                        edge.Weight = weight; 
+                        AssetDatabase.CreateAsset(edge, edgePath);
                     }
 #else
-            edge = ScriptableObject.CreateInstance<EdgeData>();
-            edge.From = nodeValue;
-            edge.To = connValue;
+                    edge = ScriptableObject.CreateInstance<EdgeData>();
+                    edge.From = nodeValue;
+                    edge.To = connValue;
+                    edge.Weight = weight;
 #endif
 
                     graphData.Edges.Add(edge);
@@ -135,8 +140,8 @@ namespace Assets.Scrtpts.BFS.XML
             }
 
 #if UNITY_EDITOR
-            UnityEditor.AssetDatabase.SaveAssets();
-            UnityEditor.AssetDatabase.Refresh();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
 #endif
 
             graphUIManager.CreateGraph(graphData);

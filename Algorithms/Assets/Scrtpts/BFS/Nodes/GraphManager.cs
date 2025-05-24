@@ -114,7 +114,31 @@ public class GraphManager : MonoBehaviour
                 }
             }
         }
+        ArrangeNodesInGrid(5, 2f);
     }
+
+    public void ArrangeNodesInGrid(int columns = 5, float spacing = 2f)
+    {
+        int row = 0;
+        int column = 0;
+
+        foreach (var nodeController in _nodeControllers.Values)
+        {
+            float xPos = column * spacing;
+            float yPos = -row * spacing;
+
+            nodeController.transform.position = new Vector3(xPos, yPos, 0);
+
+            column++;
+            if (column >= columns)
+            {
+                column = 0;
+                row++;
+            }
+        }
+    }
+
+
 
     public void AddNode(int value)
     {
@@ -142,12 +166,12 @@ public class GraphManager : MonoBehaviour
         controller.Setup(newNodeData);
         _nodeControllers[value] = controller;
 
-        newNode.transform.position = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
+        //newNode.transform.position = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
 
         controller.HideNode();
     }
 
-    public void AddEdge(int nodeA, int nodeB)
+    public void AddEdge(int nodeA, int nodeB, float weight = 1f)
     {
         NodeData nodeDataA = _graphData.Nodes.Find(n => n.Value == nodeA);
         NodeData nodeDataB = _graphData.Nodes.Find(n => n.Value == nodeB);
@@ -179,6 +203,7 @@ public class GraphManager : MonoBehaviour
             EdgeData newEdgeData = ScriptableObject.CreateInstance<EdgeData>();
             newEdgeData.From = nodeA;
             newEdgeData.To = nodeB;
+            newEdgeData.Weight = weight;
 
 #if UNITY_EDITOR
             string assetPath = $"Assets/GraphEdges/Edge_{nodeA}_{nodeB}.asset";
@@ -194,7 +219,11 @@ public class GraphManager : MonoBehaviour
         {
             GameObject edgeGO = Instantiate(_edgePrefab, transform);
             EdgeRenderer edgeRenderer = edgeGO.GetComponent<EdgeRenderer>();
-            edgeRenderer.Setup(_nodeControllers[nodeA].transform, _nodeControllers[nodeB].transform);
+
+            EdgeData edgeData = _graphData.Edges.Find(e =>
+    (e.From == nodeA && e.To == nodeB) || (e.From == nodeB && e.To == nodeA));
+
+            edgeRenderer.Setup(_nodeControllers[nodeA].transform, _nodeControllers[nodeB].transform, edgeData.Weight);
 
             _edges[(nodeA, nodeB)] = edgeRenderer;
             _edges[(nodeB, nodeA)] = edgeRenderer;
